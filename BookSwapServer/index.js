@@ -7,6 +7,10 @@ const options = {
   credentials: true,
 };
 
+console.log('PORT');
+
+console.log('TEST SOMETHING')
+
 const app = express();
 
 app
