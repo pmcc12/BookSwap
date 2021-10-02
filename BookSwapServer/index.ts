@@ -18,3 +18,5 @@ app
   .use(express.json())
   .use(router)
   .listen(process.env.PORT);
+
+export default app;
