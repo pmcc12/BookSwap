@@ -70,5 +70,6 @@ async function removeOneBook(req: Request, res: Response) {
     res.sendStatus(500);
   }
 }
+console.log('here')
 
 export default { getAllBooks, addOneBook, removeOneBook };
