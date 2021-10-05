@@ -71,5 +71,6 @@ async function removeOneBook(req: Request, res: Response) {
   }
 }
 console.log('here')
+console.log('here2')
 
 export default { getAllBooks, addOneBook, removeOneBook };
