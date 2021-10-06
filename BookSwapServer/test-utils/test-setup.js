@@ -37,11 +37,10 @@ async function dropAllCollections() {
 
 module.exports = {
   setupDB(databaseName) {
-    // Connect to Mongoose
+    // Should only connect in
     beforeAll(async () => {
       const url = `mongodb://127.0.0.1/${databaseName}`;
-      await mongoose.createConnection(url, { useNewUrlParser: true });
-      // Should be mongoose.connect
+      await mongoose.connect(url);
     });
 
     // Cleans up database between each test

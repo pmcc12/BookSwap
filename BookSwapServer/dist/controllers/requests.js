@@ -8,16 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const users_1 = __importDefault(require("../models/users"));
+const UserModel = require('../models/users');
 function getRequests(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const userId = req.params.userId;
         try {
-            const books = yield users_1.default.findOne({ _id: userId });
+            const books = yield UserModel.findOne({ _id: userId });
             res.status(200);
             res.send(books === null || books === void 0 ? void 0 : books.requests.sort((a, b) => b.timeStamp - a.timeStamp));
         }
@@ -31,7 +28,7 @@ function addOneRequest(req, res) {
         const userId = req.params.userId;
         const requestToInsert = req.body;
         try {
-            users_1.default.findOneAndUpdate({ _id: userId }, { $push: { requests: requestToInsert } }, { upsert: true });
+            UserModel.findOneAndUpdate({ _id: userId }, { $push: { requests: requestToInsert } }, { upsert: true });
             res.sendStatus(201);
         }
         catch (e) {
@@ -46,7 +43,7 @@ function changeViewedPropertyOfRequest(req, res) {
         // specify if the target user is the sender or the receiver of the request and if I want to set hasBeenViewed to True or False
         const { idUser, idOtherUser, receiverOrSender, trueOrFalse } = req.params;
         try {
-            const userInfos = yield users_1.default.findOne({ _id: idUser });
+            const userInfos = yield UserModel.findOne({ _id: idUser });
             if (userInfos) {
                 for (const el of userInfos.requests) {
                     if ((receiverOrSender === 'receiver' ? el.userFrom : el.userTo) ===
@@ -56,7 +53,7 @@ function changeViewedPropertyOfRequest(req, res) {
                 }
             }
             // await userInfos.save();
-            users_1.default.findOneAndUpdate({ _id: idUser }, { requests: userInfos === null || userInfos === void 0 ? void 0 : userInfos.requests });
+            UserModel.findOneAndUpdate({ _id: idUser }, { requests: userInfos === null || userInfos === void 0 ? void 0 : userInfos.requests });
             res.sendStatus(201);
         }
         catch (e) {
@@ -71,11 +68,11 @@ function deleteRequest(req, res) {
         // specify if the target user is the sender or the receiver of the request that I want to delete
         const { idUser, idOtherUser, receiverOrSender } = req.params;
         try {
-            const userInfos = yield users_1.default.findOne({ _id: idUser });
+            const userInfos = yield UserModel.findOne({ _id: idUser });
             const temp = userInfos === null || userInfos === void 0 ? void 0 : userInfos.requests.filter((request) => (receiverOrSender === 'receiver'
                 ? request.userFrom
                 : request.userTo) !== idOtherUser);
-            users_1.default.findOneAndUpdate({ _id: idUser }, { requests: temp }).then();
+            UserModel.findOneAndUpdate({ _id: idUser }, { requests: temp }).then();
             res.sendStatus(201);
         }
         catch (e) {
@@ -88,7 +85,7 @@ function changeStatusRequest(req, res) {
         // TODO: refactor so that it updates without doing a double operation
         const { idUser, idOtherUser, status, receiverOrSender } = req.params;
         try {
-            const userInfos = yield users_1.default.findOne({ _id: idUser });
+            const userInfos = yield UserModel.findOne({ _id: idUser });
             if (userInfos) {
                 for (const el of userInfos === null || userInfos === void 0 ? void 0 : userInfos.requests) {
                     if ((receiverOrSender === 'receiver' ? el.userFrom : el.userTo) ===
@@ -97,7 +94,7 @@ function changeStatusRequest(req, res) {
                     }
                 }
             }
-            users_1.default.findOneAndUpdate({ _id: idUser }, { requests: userInfos === null || userInfos === void 0 ? void 0 : userInfos.requests });
+            UserModel.findOneAndUpdate({ _id: idUser }, { requests: userInfos === null || userInfos === void 0 ? void 0 : userInfos.requests });
             res.sendStatus(201);
         }
         catch (e) {

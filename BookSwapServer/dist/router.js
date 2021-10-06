@@ -32,4 +32,4 @@ router.put('/requests/:idUser/:idOtherUser/:status/:receiverOrSender/status', re
 router.get('/messages/:idUser', messages_1.default.getAllMessages);
 router.post('/messages/:idUser/:idOtherUser/:otherUsername?', messages_1.default.addMessage);
 router.put('/messages/:idUser/:idOtherUser/:trueOrFalse/notification', messages_1.default.toggleNotificationChat);
-exports.default = router;
+module.exports = router;
