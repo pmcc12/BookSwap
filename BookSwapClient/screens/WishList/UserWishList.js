@@ -4,8 +4,8 @@ import { IconButton, Colors } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 
 import { UserContext } from '../../AuthContext';
-import BASE_URL from '../../configClient';
-import BookCard from '../../components/BookCard';
+import {API_BASE_URL} from "@env"
+import BookCard from '../../components/bookCard';
 import {
   useFonts,
   Rosario_300Light,
@@ -39,7 +39,7 @@ const WishList = ({ navigation }) => {
   const [books, setBooks] = useState(null);
 
   function fetchBookFromDb() {
-    fetch(`${BASE_URL}/books/${user.id}/wishList`)
+    fetch(`${API_BASE_URL}/books/${user.id}/wishList`)
       .then((data) => data.json())
       .then((res) => setBooks(res))
       .catch((err) => console.log(err));
@@ -50,11 +50,11 @@ const WishList = ({ navigation }) => {
   }, [isFocused]);
 
   function removeBook(isbn) {
-    fetch(`${BASE_URL}/books/${user.id}/${isbn}/wishList`, {
+    fetch(`${API_BASE_URL}/books/${user.id}/${isbn}/wishList`, {
       method: 'DELETE',
     })
       .then(() =>
-        fetch(`${BASE_URL}/isbn/${user.id}/${isbn}/buy`, {
+        fetch(`${API_BASE_URL}/isbn/${user.id}/${isbn}/buy`, {
           method: 'DELETE',
         }),
       )

@@ -14,22 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require('bcrypt');
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// const User = require('./../models/users');
-const users_1 = __importDefault(require("../models/users"));
+const UserModel = require('../models/users');
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, userPassword } = req.body;
-    const user = yield users_1.default.findOne({ email });
+    /* tslint:disable-next-line */
+    console.log('Received email: ' + email + ' and received pass: ' + userPassword);
+    const user = yield UserModel.findOne({ email });
     if (user) {
         return res
             .status(409)
-            .send({ error: '409', message: 'Could not create an user' });
+            .send({ error: '409', message: 'Could not create an user sent' });
     }
     try {
         if (userPassword === '') {
             throw new Error();
         }
         const hash = yield bcrypt.hash(userPassword, 10);
-        const newUser = new users_1.default(Object.assign(Object.assign({}, req.body), { password: hash }));
+        const newUser = new UserModel(Object.assign(Object.assign({}, req.body), { password: hash }));
         const { _id } = yield newUser.save();
         const id = _id.toString();
         const accessToken = jsonwebtoken_1.default.sign({ _id }, 'v3ry!str0ngP4ss');
@@ -40,15 +41,19 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /* tslint:disable-next-line */
+    console.log('Login!');
     const { email, userPassword } = req.body;
     try {
-        const user1 = yield users_1.default.findOne({ email });
+        const user1 = yield UserModel.findOne({ email });
         // let _id;
         // let password;
         if (user1) {
             const { _id, password } = user1;
             const validatedPass = yield bcrypt.compare(userPassword, password);
             if (!validatedPass) {
+                /* tslint:disable-next-line */
+                console.log('not valid password');
                 throw new Error();
             }
             const id = _id.toString();
@@ -57,17 +62,19 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (error) {
+        /* tslint:disable-next-line */
+        console.log('user or pass not ok!');
         res
             .status(401)
-            .send({ error: '401', message: 'Username or password is incorrect' });
+            .send({ error: '401', message: 'Email or password is incorrect' });
     }
 });
 const getUsername = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.params;
     try {
-        const userInfos = yield users_1.default.findOne({ _id: userId });
+        const userInfos = yield UserModel.findOne({ _id: userId });
         const username = userInfos === null || userInfos === void 0 ? void 0 : userInfos.username;
-        res.status(201).send({ username });
+        res.status(200).send({ username });
     }
     catch (error) {
         res.status(500);

@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import { UserContext } from '../../AuthContext';
 import BASE_URL from '../../configClient';
-import BookCard from '../../components/BookCard';
+import BookCard from '../../components/bookCard';
 import {
   useFonts,
   Rosario_300Light,

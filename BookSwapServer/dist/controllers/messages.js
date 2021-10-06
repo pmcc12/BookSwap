@@ -8,17 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const users_1 = __importDefault(require("../models/users"));
-const users_2 = __importDefault(require("../models/users"));
+const UserModel = require('../models/users');
 function getAllMessages(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { idUser } = req.params;
         try {
-            const userInfos = yield users_2.default.findOne({ _id: idUser });
+            const userInfos = yield UserModel.findOne({ _id: idUser });
             res.status(200);
             res.send(userInfos === null || userInfos === void 0 ? void 0 : userInfos.messages.reverse());
         }
@@ -33,7 +29,7 @@ function addMessage(req, res) {
         const { idUser, idOtherUser, otherUsername } = req.params;
         const messageInfos = req.body;
         try {
-            const allUserInfos = yield users_2.default.findOne({ _id: idUser });
+            const allUserInfos = yield UserModel.findOne({ _id: idUser });
             if (allUserInfos) {
                 const prevUserMsgs = allUserInfos.messages;
                 const msgToChange = prevUserMsgs.filter((msg) => msg.otherUser === idOtherUser);
@@ -53,7 +49,7 @@ function addMessage(req, res) {
                     msgToChange[0].lastMessage = messageInfos.timeStamp;
                     otherMessagesToKeep.push(msgToChange[0]);
                 }
-                yield users_1.default.findOneAndUpdate({ _id: idUser }, { messages: otherMessagesToKeep }).then(() => {
+                yield UserModel.findOneAndUpdate({ _id: idUser }, { messages: otherMessagesToKeep }).then(() => {
                     res.sendStatus(201);
                 });
             }
@@ -68,7 +64,7 @@ function toggleNotificationChat(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { idUser, idOtherUser, trueOrFalse } = req.params;
         try {
-            const allUserInfos = yield users_2.default.findOne({ _id: idUser });
+            const allUserInfos = yield UserModel.findOne({ _id: idUser });
             const prevUserMsgs = allUserInfos === null || allUserInfos === void 0 ? void 0 : allUserInfos.messages;
             const msgToChange = prevUserMsgs === null || prevUserMsgs === void 0 ? void 0 : prevUserMsgs.filter((msg) => msg.otherUser === idOtherUser);
             const otherMessagesToKeep = prevUserMsgs === null || prevUserMsgs === void 0 ? void 0 : prevUserMsgs.filter((msg) => msg.otherUser !== idOtherUser);
@@ -81,7 +77,7 @@ function toggleNotificationChat(req, res) {
                 }
                 otherMessagesToKeep === null || otherMessagesToKeep === void 0 ? void 0 : otherMessagesToKeep.push(msgToChange[0]);
             }
-            users_1.default.findOneAndUpdate({ _id: idUser }, { messages: otherMessagesToKeep });
+            UserModel.findOneAndUpdate({ _id: idUser }, { messages: otherMessagesToKeep });
             res.sendStatus(201);
         }
         catch (e) {

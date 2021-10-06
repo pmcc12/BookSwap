@@ -4,11 +4,12 @@ import cors from 'cors';
 const router = require('./router');
 import * as dotenv from 'dotenv'
 
-const filename = process.env.ENV === 'test'
-  ? '.env.test'
-  : '.env'
-  
+const filename = process.env.ENV === 'test' ? '.env.test' : '.env'
+
 dotenv.config({ path: filename })
+
+/* tslint:disable-next-line */
+console.log(process.env.PORT)
 
 
 const app = express();
@@ -23,4 +24,7 @@ app
   .use(cors(options))
   .use(express.json())
   .use(router)
-  .listen(process.env.PORT);
+  .listen(process.env.PORT,() => {
+    /* tslint:disable-next-line */
+    console.log('listening in port', process.env.PORT);
+  });

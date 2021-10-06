@@ -25,16 +25,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // const express = require('express');
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const router_1 = __importDefault(require("./router"));
+const router = require('./router');
 const dotenv = __importStar(require("dotenv"));
-dotenv.config();
+const filename = process.env.ENV === 'test' ? '.env.test' : '.env';
+dotenv.config({ path: filename });
+/* tslint:disable-next-line */
+console.log(process.env.PORT);
+const app = (0, express_1.default)();
 const options = {
     origin: '*',
     credentials: true,
 };
-const app = (0, express_1.default)();
 app
     .use((0, cors_1.default)(options))
     .use(express_1.default.json())
-    .use(router_1.default)
-    .listen(process.env.PORT);
+    .use(router)
+    .listen(process.env.PORT, () => {
+    /* tslint:disable-next-line */
+    console.log('listening in port', process.env.PORT);
+});

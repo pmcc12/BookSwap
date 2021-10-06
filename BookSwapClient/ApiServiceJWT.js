@@ -4,9 +4,11 @@
 
 const apiServiceJWT = {};
 
+import {API_BASE_URL} from "@env"
+
 apiServiceJWT.register = (user) => {
   return (
-    fetch(`http://192.168.1.14:3000/register`, {
+    fetch(`http://${API_BASE_URL}:3000/register`, {
       method: 'POST',
       credentials: 'include',
       mode: 'cors',
@@ -20,7 +22,8 @@ apiServiceJWT.register = (user) => {
 };
 
 apiServiceJWT.login = (user) => {
-  return fetch(`http://192.168.1.14:3000/login`, {
+  console.log('my base url: ', API_BASE_URL)
+  return fetch(`http://${API_BASE_URL}:3000/login`, {
     method: 'POST',
     credentials: 'include',
     mode: 'cors',
