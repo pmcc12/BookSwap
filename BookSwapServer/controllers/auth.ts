@@ -8,11 +8,13 @@ import { IUser } from '../types';
 
 const create = async (req: Request, res: Response ) => {
   const { email, userPassword } = req.body;
+  /* tslint:disable-next-line */
+  console.log('Received email: '+email+' and received pass: '+userPassword)
   const user = await UserModel.findOne({ email });
   if (user) {
     return res
       .status(409)
-      .send({ error: '409', message: 'Could not create an user' });
+      .send({ error: '409', message: 'Could not create an user sent' });
   }
   try {
     if (userPassword === '') {
@@ -33,6 +35,8 @@ const create = async (req: Request, res: Response ) => {
 };
 
 const login = async (req: Request, res: Response)  => {
+  /* tslint:disable-next-line */
+  console.log('Login!');
   const { email, userPassword } = req.body;
   try {
     const user1:IUser | null = await UserModel.findOne({ email });
@@ -43,6 +47,8 @@ const login = async (req: Request, res: Response)  => {
       const {_id, password} = user1
       const validatedPass = await bcrypt.compare(userPassword, password);
       if (!validatedPass) {
+        /* tslint:disable-next-line */
+        console.log('not valid password');
         throw new Error();
       }
       const id = _id.toString();
@@ -51,6 +57,8 @@ const login = async (req: Request, res: Response)  => {
     }
 
   } catch (error) {
+    /* tslint:disable-next-line */
+    console.log('user or pass not ok!');
     res
       .status(401)
       .send({ error: '401', message: 'Email or password is incorrect' });

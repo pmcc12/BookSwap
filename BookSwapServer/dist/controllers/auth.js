@@ -17,11 +17,14 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserModel = require('../models/users');
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, userPassword } = req.body;
+    /* tslint:disable-next-line */
+    console.log('Received email: ' + email + ' and received pass: ' + userPassword);
+
     const user = yield UserModel.findOne({ email });
     if (user) {
         return res
             .status(409)
-            .send({ error: '409', message: 'Could not create an user' });
+            .send({ error: '409', message: 'Could not create an user sent' });
     }
     try {
         if (userPassword === '') {
@@ -39,6 +42,8 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /* tslint:disable-next-line */
+    console.log('Login!');
     const { email, userPassword } = req.body;
     try {
         const user1 = yield UserModel.findOne({ email });
@@ -48,6 +53,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             const { _id, password } = user1;
             const validatedPass = yield bcrypt.compare(userPassword, password);
             if (!validatedPass) {
+                /* tslint:disable-next-line */
+                console.log('not valid password');
                 throw new Error();
             }
             const id = _id.toString();
@@ -56,6 +63,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (error) {
+        /* tslint:disable-next-line */
+        console.log('user or pass not ok!');
         res
             .status(401)
             .send({ error: '401', message: 'Email or password is incorrect' });

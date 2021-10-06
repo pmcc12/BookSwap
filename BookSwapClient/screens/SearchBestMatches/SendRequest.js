@@ -14,8 +14,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 
 import { UserContext } from '../../AuthContext';
-import BASE_URL from '../../configClient';
-import BookCard from '../../components/BookCard';
+import {API_BASE_URL} from "@env"
+import BookCard from '../../components/bookCard';
 import AppLoading from 'expo-app-loading';
 
 import {
@@ -61,7 +61,7 @@ const SendRequest = ({ route, navigation }) => {
 
   async function fetchBookOfOtherUser() {
     try {
-      let response = await fetch(`${BASE_URL}/books/${UserMatch}/all`);
+      let response = await fetch(`${API_BASE_URL}/books/${UserMatch}/all`);
       let json = await response.json();
       setOtherUserBooks(json);
       let matchesFromLibraryToSell = json.booksToBuy.filter((books) =>

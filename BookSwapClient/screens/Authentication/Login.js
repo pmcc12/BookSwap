@@ -19,7 +19,6 @@ import {
 } from '@expo-google-fonts/rosario';
 import AppLoading from 'expo-app-loading';
 import LoadingLogin from '../../components/LoadingLogin';
-import AsyncStorage from '@react-native-community/async-storage'
 
 const Login = ({ navigation }) => {
   const [fontsLoaded] = useFonts({

@@ -14,8 +14,8 @@ import { IconButton, Colors } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../AuthContext';
-import BASE_URL from '../../configClient';
 import DisplaySingleRequest from '../../components/displaySingleRequest';
+import {API_BASE_URL} from "@env"
 
 const AllMessages = ({ route, navigation }) => {
   const isFocused = useIsFocused();
@@ -24,7 +24,7 @@ const AllMessages = ({ route, navigation }) => {
 
   async function fetchMessagesFromDb() {
     try {
-      let response = await fetch(`${BASE_URL}/messages/${user.id}`);
+      let response = await fetch(`${API_BASE_URL}/messages/${user.id}`);
       let json = await response.json();
       setAllMessages(json);
     } catch (err) {
@@ -37,7 +37,7 @@ const AllMessages = ({ route, navigation }) => {
   }, [isFocused]);
 
   function turnOffTheNotification(otherUser) {
-    fetch(`${BASE_URL}/messages/${user.id}/${otherUser}/false/notification`, {
+    fetch(`${API_BASE_URL}/messages/${user.id}/${otherUser}/false/notification`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

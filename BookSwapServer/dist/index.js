@@ -5,12 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const morgan_1 = __importDefault(require("morgan"));
 const router = require('./router');
-const dotenv = require('dotenv');
-const filename = process.env.NODE_ENV === 'test'
-    ? '.env.test'
-    : '.env';
+const dotenv = __importStar(require("dotenv"));
+const filename = process.env.ENV === 'test' ? '.env.test' : '.env';
+
 dotenv.config({ path: filename });
 /* tslint:disable-next-line */
 console.log(process.env.PORT);
@@ -23,5 +21,8 @@ app
     .use((0, cors_1.default)(options))
     .use(express_1.default.json())
     .use(router)
-    .use((0, morgan_1.default)('tiny'))
-    .listen(process.env.PORT);
+    .listen(process.env.PORT, () => {
+    /* tslint:disable-next-line */
+    console.log('listening in port', process.env.PORT);
+});
+

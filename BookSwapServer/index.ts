@@ -4,6 +4,7 @@ import morgan from 'morgan';
 const router = require('./router');
 const dotenv = require('dotenv');
 
+
 const filename = process.env.NODE_ENV === 'test'
   ? '.env.test'
   : '.env'
@@ -26,5 +27,8 @@ app
   .use(cors(options))
   .use(express.json())
   .use(router)
-  .use(morgan('tiny'))
-  .listen(process.env.PORT);
+  .listen(process.env.PORT,() => {
+    /* tslint:disable-next-line */
+    console.log('listening in port', process.env.PORT);
+  });
+

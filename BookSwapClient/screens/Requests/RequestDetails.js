@@ -12,8 +12,8 @@ import {
 import { IconButton, Colors } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../AuthContext';
-import BASE_URL from '../../configClient';
-import BookCard from '../../components/BookCard';
+import BookCard from '../../components/bookCard';
+import {API_BASE_URL} from "@env"
 import {
   useFonts,
   Rosario_300Light,
@@ -49,14 +49,14 @@ const RequestDetails = ({ route, navigation }) => {
 
   function rejectOffer() {
     fetch(
-      `${BASE_URL}/requests/${request.userFrom}/${request.userTo}/sender/true`,
+      `${API_BASE_URL}/requests/${request.userFrom}/${request.userTo}/sender/true`,
       {
         method: 'PUT',
       },
     )
       .then(() =>
         fetch(
-          `${BASE_URL}/requests/${request.userTo}/${request.userFrom}/receiver`,
+          `${API_BASE_URL}/requests/${request.userTo}/${request.userFrom}/receiver`,
           {
             method: 'DELETE',
           },
@@ -64,7 +64,7 @@ const RequestDetails = ({ route, navigation }) => {
       )
       .then(() =>
         fetch(
-          `${BASE_URL}/requests/${request.userFrom}/${request.userTo}/rejected/sender/status`,
+          `${API_BASE_URL}/requests/${request.userFrom}/${request.userTo}/rejected/sender/status`,
           {
             method: 'PUT',
           },
@@ -91,14 +91,14 @@ const RequestDetails = ({ route, navigation }) => {
       timeStamp: Date.now(),
     };
     fetch(
-      `${BASE_URL}/requests/${request.userFrom}/${request.userTo}/inProgress/sender/status`,
+      `${API_BASE_URL}/requests/${request.userFrom}/${request.userTo}/inProgress/sender/status`,
       {
         method: 'PUT',
       },
     )
       .then(() =>
         fetch(
-          `${BASE_URL}/requests/${request.userTo}/${request.userFrom}/inProgress/receiver/status`,
+          `${API_BASE_URL}/requests/${request.userTo}/${request.userFrom}/inProgress/receiver/status`,
           {
             method: 'PUT',
           },
@@ -106,7 +106,7 @@ const RequestDetails = ({ route, navigation }) => {
       )
       .then(() =>
         fetch(
-          `${BASE_URL}/messages/${request.userFrom}/${user.id}/${request.userToUsername}`,
+          `${API_BASE_URL}/messages/${request.userFrom}/${user.id}/${request.userToUsername}`,
           {
             method: 'POST',
             headers: {
@@ -118,7 +118,7 @@ const RequestDetails = ({ route, navigation }) => {
       )
       .then(() => {
         fetch(
-          `${BASE_URL}/messages/${user.id}/${request.userFrom}/${request.userFromUsername}`,
+          `${API_BASE_URL}/messages/${user.id}/${request.userFrom}/${request.userFromUsername}`,
           {
             method: 'POST',
             headers: {
@@ -130,7 +130,7 @@ const RequestDetails = ({ route, navigation }) => {
       })
       .then(() => {
         fetch(
-          `${BASE_URL}/messages/${request.userFrom}/${user.id}/true/notification`,
+          `${API_BASE_URL}/messages/${request.userFrom}/${user.id}/true/notification`,
           {
             method: 'PUT',
           },
@@ -138,7 +138,7 @@ const RequestDetails = ({ route, navigation }) => {
       })
       .then(() => {
         fetch(
-          `${BASE_URL}/messages/${user.id}/${request.userFrom}/true/notification`,
+          `${API_BASE_URL}/messages/${user.id}/${request.userFrom}/true/notification`,
           {
             method: 'PUT',
           },
@@ -149,7 +149,7 @@ const RequestDetails = ({ route, navigation }) => {
   }
 
   function deleteRequestForMaker() {
-    fetch(`${BASE_URL}/requests/${request.userFrom}/${request.userTo}/sender`, {
+    fetch(`${API_BASE_URL}/requests/${request.userFrom}/${request.userTo}/sender`, {
       method: 'DELETE',
     })
       .then(() => navigation.navigate('All Requests'))
