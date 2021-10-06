@@ -19,7 +19,6 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, userPassword } = req.body;
     /* tslint:disable-next-line */
     console.log('Received email: ' + email + ' and received pass: ' + userPassword);
-
     const user = yield UserModel.findOne({ email });
     if (user) {
         return res

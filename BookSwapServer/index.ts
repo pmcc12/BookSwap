@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
 const router = require('./router');
 const dotenv = require('dotenv');
 
@@ -31,4 +30,5 @@ app
     /* tslint:disable-next-line */
     console.log('listening in port', process.env.PORT);
   });
+
 
