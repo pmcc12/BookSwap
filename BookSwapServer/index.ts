@@ -1,15 +1,18 @@
-// const express = require('express');
 import express from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 const router = require('./router');
-import * as dotenv from 'dotenv'
+const dotenv = require('dotenv');
 
-const filename = process.env.ENV === 'test' ? '.env.test' : '.env'
+
+const filename = process.env.NODE_ENV === 'test'
+  ? '.env.test'
+  : '.env'
 
 dotenv.config({ path: filename })
 
 /* tslint:disable-next-line */
-console.log(process.env.PORT)
+console.log(process.env.PORT) 
 
 
 const app = express();
@@ -28,3 +31,4 @@ app
     /* tslint:disable-next-line */
     console.log('listening in port', process.env.PORT);
   });
+
