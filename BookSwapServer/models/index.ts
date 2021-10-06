@@ -4,9 +4,12 @@ const { DBNAME, DBPORT } = require('dotenv');
 async function connectDb (url: string) {
   await mongoose.connect(url)
     .then(() => {
+            /* tslint:disable-next-line */
         console.log('📍 Database is connected!')
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+        /* tslint:disable-next-line */
+        console.log(e)});
 }
 
 if(process.env.NODE_ENV === '') {
