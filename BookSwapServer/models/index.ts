@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
-import { dbName, dbPort } from '../configServer';
+const { DBNAME, DBPORT } = require('dotenv');
 
-mongoose.connect(`mongodb://localhost:${dbPort}/${dbName}`);
+async function connectDb (url: string) {
+  await mongoose.connect(url)
+    .then(() => {
+        console.log('📍 Database is connected!')
+    })
+    .catch((e) => console.log(e));
+}
+
+if(process.env.NODE_ENV === '') {
+  connectDb(`mongodb://localhost:${DBPORT}/${DBNAME}`)
+}
 
 export default mongoose;

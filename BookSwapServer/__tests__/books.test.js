@@ -137,7 +137,7 @@ describe('Books Endpoints', () => {
         booksToSell: [mockBooks(1)],
       });
 
-      // Add a book to a user
+      // Delete a book to a user
       const postRes = await request.delete(
         `/books/${_id}/${booksToSell[0].ISBN}/library`,
       );
@@ -158,7 +158,7 @@ describe('Books Endpoints', () => {
         booksToBuy: [mockBooks(1)],
       });
 
-      // Add a book to a user
+      // Delete a book from a user
       const postRes = await request.delete(
         `/books/${_id}/${booksToBuy[0].ISBN}/wishList`,
       );
