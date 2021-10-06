@@ -13,7 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const { DBNAME, DBPORT } = require('dotenv');
+require('dotenv').config();
+/* tslint:disable-next-line */
+console.log('here in index:', process.env.NODE_ENV);
 function connectDb(url) {
     return __awaiter(this, void 0, void 0, function* () {
         yield mongoose_1.default.connect(url)
@@ -27,7 +29,7 @@ function connectDb(url) {
         });
     });
 }
-if (process.env.NODE_ENV === '') {
-    connectDb(`mongodb://localhost:${DBPORT}/${DBNAME}`);
+if (process.env.NODE_ENV === 'prod') {
+    connectDb(`mongodb://localhost:${process.env.DBPORT}/${process.env.DBNAME}`);
 }
 exports.default = mongoose_1.default;

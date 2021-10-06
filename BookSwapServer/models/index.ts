@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-const { DBNAME, DBPORT } = require('dotenv');
+require('dotenv').config();
+/* tslint:disable-next-line */
+console.log('here in index:', process.env.NODE_ENV)
 
 async function connectDb (url: string) {
   await mongoose.connect(url)
@@ -12,8 +14,8 @@ async function connectDb (url: string) {
         console.log(e)});
 }
 
-if(process.env.NODE_ENV === '') {
-  connectDb(`mongodb://localhost:${DBPORT}/${DBNAME}`)
+if(process.env.NODE_ENV === 'prod') {
+  connectDb(`mongodb://localhost:${process.env.DBPORT}/${process.env.DBNAME}`);
 }
 
 export default mongoose;
