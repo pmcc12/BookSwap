@@ -14,7 +14,7 @@ import { IconButton, Colors } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../AuthContext';
 import DisplaySingleRequest from '../../components/displaySingleRequest';
-import {API_BASE_URL} from "@env"
+import { API_BASE_URL } from '@env';
 
 const AllRequests = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
