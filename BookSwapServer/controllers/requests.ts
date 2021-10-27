@@ -1,34 +1,33 @@
-const User = require('../models/users.js');
+import { Request, Response } from 'express';
+const UserModel = require ('../models/users');
 
-async function getRequests(req, res) {
+async function getRequests(req: Request, res: Response ) {
   const userId = req.params.userId;
   try {
-    const books = await User.findOne({ _id: userId });
+    const books = await UserModel.findOne({ _id: userId });
     res.status(200);
-    res.send(books.requests.sort((a, b) => b.timeStamp - a.timeStamp));
+    res.send(books?.requests.sort((a: any, b: any) => b.timeStamp - a.timeStamp));
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-async function addOneRequest(req, res) {
+async function addOneRequest(req: Request, res: Response ) {
   const userId = req.params.userId;
   const requestToInsert = req.body;
   try {
-    User.findOneAndUpdate(
+    UserModel.findOneAndUpdate(
       { _id: userId },
       { $push: { requests: requestToInsert } },
       { upsert: true },
-    ).then(() => {});
+    )
     res.sendStatus(201);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-async function changeViewedPropertyOfRequest(req, res) {
+async function changeViewedPropertyOfRequest(req: Request, res: Response ) {
   // TODO: refactor so that it updates without doing a double operation
 
   // HOW TO USE IT : in the url I need to set first of all my target user (idUser), then the other user, finally I have to
@@ -36,28 +35,29 @@ async function changeViewedPropertyOfRequest(req, res) {
 
   const { idUser, idOtherUser, receiverOrSender, trueOrFalse } = req.params;
   try {
-    const userInfos = await User.findOne({ _id: idUser });
-    for (let el of userInfos.requests) {
-      if (
-        (receiverOrSender === 'receiver' ? el.userFrom : el.userTo) ===
-        idOtherUser
-      ) {
-        el.hasBeenViewed = trueOrFalse === 'true' ? true : false;
+    const userInfos = await UserModel.findOne({ _id: idUser });
+    if (userInfos) {
+      for (const el of userInfos.requests) {
+        if (
+          (receiverOrSender === 'receiver' ? el.userFrom : el.userTo) ===
+          idOtherUser
+        ) {
+          el.hasBeenViewed = trueOrFalse === 'true' ? true : false;
+        }
       }
     }
     // await userInfos.save();
-    User.findOneAndUpdate(
+    UserModel.findOneAndUpdate(
       { _id: idUser },
-      { requests: userInfos.requests },
-    ).then(() => {});
+      { requests: userInfos?.requests },
+    )
     res.sendStatus(201);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-async function deleteRequest(req, res) {
+async function deleteRequest(req: Request, res: Response ) {
   // TODO: refactor so that it updates without doing a double operation
 
   // HOW TO USE IT : in the url I need to set first of all my target user (idUser), then the other user, finally I have to
@@ -65,49 +65,41 @@ async function deleteRequest(req, res) {
 
   const { idUser, idOtherUser, receiverOrSender } = req.params;
   try {
-    const userInfos = await User.findOne({ _id: idUser });
-    const temp = userInfos.requests.filter(
-      (request) =>
+    const userInfos = await UserModel.findOne({ _id: idUser });
+    const temp = userInfos?.requests.filter(
+      (request: any) =>
         (receiverOrSender === 'receiver'
           ? request.userFrom
           : request.userTo) !== idOtherUser,
     );
-    User.findOneAndUpdate({ _id: idUser }, { requests: temp }).then(() => {});
+    UserModel.findOneAndUpdate({ _id: idUser }, { requests: temp }).then();
     res.sendStatus(201);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-async function changeStatusRequest(req, res) {
+async function changeStatusRequest(req: Request, res: Response ) {
   // TODO: refactor so that it updates without doing a double operation
   const { idUser, idOtherUser, status, receiverOrSender } = req.params;
   try {
-    const userInfos = await User.findOne({ _id: idUser });
-    for (let el of userInfos.requests) {
-      if (
-        (receiverOrSender === 'receiver' ? el.userFrom : el.userTo) ===
-        idOtherUser
-      ) {
-        el.status = status;
+    const userInfos = await UserModel.findOne({ _id: idUser });
+    if (userInfos){
+      for (const el of userInfos?.requests) {
+        if (
+          (receiverOrSender === 'receiver' ? el.userFrom : el.userTo) ===
+          idOtherUser
+        ) {
+          el.status = status;
+        }
       }
     }
-    User.findOneAndUpdate(
+    UserModel.findOneAndUpdate(
       { _id: idUser },
-      { requests: userInfos.requests },
-    ).then(() => {});
+      { requests: userInfos?.requests },
+    )
     res.sendStatus(201);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
-
-module.exports = {
-  getRequests,
-  addOneRequest,
-  changeViewedPropertyOfRequest,
-  deleteRequest,
-  changeStatusRequest,
-};

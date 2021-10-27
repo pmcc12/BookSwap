@@ -13,8 +13,8 @@ import {
 import { IconButton, Colors } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../AuthContext';
-import BASE_URL from '../../configClient';
 import DisplaySingleRequest from '../../components/displaySingleRequest';
+import {API_BASE_URL} from "@env"
 
 const AllRequests = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
@@ -23,7 +23,7 @@ const AllRequests = ({ route, navigation }) => {
   const [madeRequests, setMadeRequests] = useState([]);
 
   async function controlForRequests() {
-    const response = await fetch(`${BASE_URL}/requests/${user.id}`);
+    const response = await fetch(`${API_BASE_URL}/requests/${user.id}`);
     const json = await response.json();
     const filteredIncomingRequests = json.filter(
       (request) => request.userFrom !== user.id,
@@ -42,7 +42,7 @@ const AllRequests = ({ route, navigation }) => {
   function removeNotificationBadgeReceiver(whatever) {
     if (!whatever.hasBeenViewed) {
       fetch(
-        `${BASE_URL}/requests/${whatever.userTo}/${whatever.userFrom}/receiver/true`,
+        `${API_BASE_URL}/requests/${whatever.userTo}/${whatever.userFrom}/receiver/true`,
         {
           method: 'PUT',
         },
@@ -53,7 +53,7 @@ const AllRequests = ({ route, navigation }) => {
   function removeNotificationBadgeSender(whatever) {
     if (whatever.hasBeenViewed) {
       fetch(
-        `${BASE_URL}/requests/${whatever.userFrom}/${whatever.userTo}/sender/false`,
+        `${API_BASE_URL}/requests/${whatever.userFrom}/${whatever.userTo}/sender/false`,
         {
           method: 'PUT',
         },

@@ -16,10 +16,12 @@ import {
   Rosario_700Bold_Italic,
 } from '@expo-google-fonts/rosario';
 import AppLoading from 'expo-app-loading';
-import BookCard from '../../components/BookCard';
+import BookCard from '../../components/bookCard';
 import { REACT_APP_API_KEY } from '@env';
 
 import BASE_URL from '../../configClient';
+import {API_BASE_URL, API_KEY} from "@env"
+
 
 const SelectFromInputWL = ({ route, navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -39,7 +41,7 @@ const SelectFromInputWL = ({ route, navigation }) => {
   const [books, setBooks] = useState(null);
 
   useEffect(() => {
-    fetchBookFromUserInput(title, authors, isbn, REACT_APP_API_KEY);
+    fetchBookFromUserInput(title, authors, isbn, API_KEY);
   }, [title, authors, isbn]);
 
   function fetchBookFromUserInput(titleInput, authorInput, isbnInput, key) {
@@ -92,7 +94,7 @@ const SelectFromInputWL = ({ route, navigation }) => {
       publishedDate: item.publishedDate,
     };
 
-    fetch(`${BASE_URL}/books/${user.id}/wishlist`, {
+    fetch(`${API_BASE_URL}/books/${user.id}/wishlist`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -100,7 +102,7 @@ const SelectFromInputWL = ({ route, navigation }) => {
       body: JSON.stringify(BookInfo),
     })
       .then(() =>
-        fetch(`${BASE_URL}/isbn/${user.id}/${BookInfo.ISBN}/buy`, {
+        fetch(`${API_BASE_URL}/isbn/${user.id}/${BookInfo.ISBN}/buy`, {
           method: 'POST',
         }),
       )

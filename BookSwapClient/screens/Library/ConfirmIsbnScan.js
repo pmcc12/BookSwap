@@ -4,7 +4,7 @@ import { Image } from 'react-native-elements';
 import { REACT_APP_API_KEY } from '@env';
 import BASE_URL from '../../configClient';
 import { UserContext } from '../../AuthContext';
-import BookCard from '../../components/BookCard';
+import BookCard from '../../components/bookCard';
 import { Button } from 'react-native-paper';
 import {
   useFonts,

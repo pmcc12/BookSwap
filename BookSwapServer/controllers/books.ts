@@ -1,11 +1,13 @@
-const User = require('../models/users.js');
+import { Request, Response } from 'express';
+const UserModel = require ('../models/users');
+import { Books } from '../types'
 
-async function getAllBooks(req, res) {
+async function getAllBooks(req: Request, res: Response) {
   const { userId, source } = req.params;
   try {
-    const books = await User.findOne({ _id: userId });
-    const booksToSell = books.booksToSell;
-    const booksToBuy = books.booksToBuy;
+    const books = await UserModel.findOne({ _id: userId });
+    const booksToSell = books?.booksToSell;
+    const booksToBuy = books?.booksToBuy;
     res.status(200);
     if (source === 'library') {
       res.send(booksToSell);
@@ -15,61 +17,58 @@ async function getAllBooks(req, res) {
       res.send({ booksToBuy, booksToSell });
     }
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-async function addOneBook(req, res) {
+async function addOneBook(req: Request, res: Response) {
   const { userId, source } = req.params;
   const bookToInsert = req.body;
   try {
     source === 'library'
-      ? User.findOneAndUpdate(
+      ? UserModel.findOneAndUpdate(
           { _id: userId },
           { $push: { booksToSell: bookToInsert } },
           { upsert: true },
-        ).then(() => {})
-      : User.findOneAndUpdate(
+        ).then()
+      : UserModel.findOneAndUpdate(
           { _id: userId },
           { $push: { booksToBuy: bookToInsert } },
           { upsert: true },
-        ).then(() => {});
+        ).then();
     res.sendStatus(201);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-async function removeOneBook(req, res) {
+async function removeOneBook(req: Request, res: Response) {
   const { userId, ISBN, source } = req.params;
   try {
     // TODO: refactor so that it updates without doing a double operation
-    const dbBooks = await User.findOne({ _id: userId });
+    const dbBooks = await UserModel.findOne({ _id: userId });
     source === 'library'
-      ? User.findOneAndUpdate(
+      ? UserModel.findOneAndUpdate(
           { _id: userId },
           {
-            booksToSell: dbBooks.booksToSell.filter(
-              (books) => books.ISBN !== ISBN,
+            booksToSell: dbBooks?.booksToSell.filter(
+              (books: Books) => books.ISBN !== ISBN,
             ),
           },
-        ).then(() => {})
-      : User.findOneAndUpdate(
+        ).then()
+      : UserModel.findOneAndUpdate(
           { _id: userId },
           {
-            booksToBuy: dbBooks.booksToBuy.filter(
-              (books) => books.ISBN !== ISBN,
+            booksToBuy: dbBooks?.booksToBuy.filter(
+              (books: Books) => books.ISBN !== ISBN,
             ),
           },
-        ).then(() => {});
+        ).then();
     // TODO: set the right status
     res.sendStatus(201);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 }
 
-module.exports = { getAllBooks, addOneBook, removeOneBook };
+export default { getAllBooks, addOneBook, removeOneBook };

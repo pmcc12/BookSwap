@@ -1,5 +1,7 @@
-const mongoose = require('./');
+import mongoose from './';
 const Schema = mongoose.Schema;
+import { IUser } from '../types'
+import { model } from 'mongoose';
 
 const UserSchema = new Schema({
   username: String,
@@ -11,6 +13,6 @@ const UserSchema = new Schema({
   messages: Array,
 });
 
-const User = mongoose.model('User', UserSchema);
+const UserModel = model<IUser>('User',UserSchema);
 
-module.exports = User;
+module.exports = UserModel;

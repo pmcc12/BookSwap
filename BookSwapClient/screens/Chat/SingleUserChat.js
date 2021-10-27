@@ -28,6 +28,7 @@ import {
   Rosario_700Bold_Italic,
 } from '@expo-google-fonts/rosario';
 import AppLoading from 'expo-app-loading';
+import {API_BASE_URL} from "@env"
 
 const SingleUserChat = ({ route, navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -50,7 +51,7 @@ const SingleUserChat = ({ route, navigation }) => {
 
   async function fetchMessagesFromDb() {
     try {
-      let response = await fetch(`${BASE_URL}/messages/${user.id}`);
+      let response = await fetch(`${API_BASE_URL}/messages/${user.id}`);
       let json = await response.json();
       const [onlyRelevantMessages] = json.filter(
         (message) => message.otherUser === otherUser,
