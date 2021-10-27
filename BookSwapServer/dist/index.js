@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const router = require('./router');
-const dotenv = __importStar(require("dotenv"));
-const filename = process.env.ENV === 'test' ? '.env.test' : '.env';
-
+const dotenv = require('dotenv');
+const filename = process.env.NODE_ENV === 'test'
+    ? '.env.test'
+    : '.env';
 dotenv.config({ path: filename });
 /* tslint:disable-next-line */
 console.log(process.env.PORT);
@@ -25,4 +26,3 @@ app
     /* tslint:disable-next-line */
     console.log('listening in port', process.env.PORT);
 });
-

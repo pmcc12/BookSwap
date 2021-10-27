@@ -103,11 +103,3 @@ async function changeStatusRequest(req: Request, res: Response ) {
     res.sendStatus(500);
   }
 }
-
-export default {
-  getRequests,
-  addOneRequest,
-  changeViewedPropertyOfRequest,
-  deleteRequest,
-  changeStatusRequest,
-};
